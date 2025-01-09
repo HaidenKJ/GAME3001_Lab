@@ -1,0 +1,26 @@
+[SerializeField] private float moveSpeed;
+    private Vector3 targetPosition = Vector3.zero;
+    [SerializeField] Transform island;
+    [SerializeField] private float endSceneIslandDistance;
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("Mouse Click");
+            targetPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition); 
+            targetPosition.z = 0f; 
+        }
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed*Time.deltaTime);
+        LookAt2D(targetPosition);
+
+        if (Vector3.Distance(transform.position, island.position) <= endSceneIslandDistance)
+        {
+            SceneManager.LoadScene(2);
+        }
+    }
+    void LookAt2D(Vector3 target)
+    {
+        Vector3 lookDirection = target - transform.position;
+        float angle = Mathf.Atan2(lookDirection.y, lookDirection.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+    }
